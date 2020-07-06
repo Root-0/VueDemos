@@ -1,0 +1,39 @@
+$dark: #131515;
+$primary: #012427;
+$secondary: #0197a1;
+$light: #91f8ff;
+$wite: #fffafb;
+
+// background
+.bgdark{
+    background-color: $dark;
+}
+.bgmain{
+    background-color: $primary;
+}
+.bgsecond{
+    background-color: $secondary;
+}
+.bglight{
+    background-color: $light;
+}
+.bgwite{
+    background-color: $wite;
+}
+
+// foreground
+.fgdark{
+    color: $dark;
+}
+.fgmain{
+    color: $primary;
+}
+.fgsecond{
+    color: $secondary;
+}
+.fglight{
+    color: $light;
+}
+.fgwite{
+    color: $wite;
+}
