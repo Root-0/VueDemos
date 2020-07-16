@@ -18,7 +18,7 @@ var sidebar_links = [
     {
         name: 'Reactivity',
         menulinks: [
-            'JS code in templates'
+            'JS code in templates', 'Two-way data binding', 'Computed properties', 'Watch for changes'
         ]
     }
 ]

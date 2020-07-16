@@ -35,53 +35,58 @@
             </p>
         </div>
         <div class="pagecontent pt-3 pb-5" id="app">
-            <h4 class="h3 mb-3">{{this.topic_name}}</h4>
-            <h5 class="h4 pb-2 text-black-50" style="border-bottom: 1px dashed #ccc;">
+            <h4 class="h3 mb-3 text-black-50">{{this.topic_name}}</h4>
+            <h5 class="h4 pb-2" style="border-bottom: 1px dashed #ccc;">
                 {{this.subtopic_name}}
             </h5>
 
             <p>
-                Listen to events with <strong>v-on:</strong>event_name <br>
-                Assign a method on event that takes place. <br>
-                Shorthand for v-on:click="___" is <em>@click="___"</em>
+                Vue=>data is not reactive, methods might be re-executed even if the property they don't depend on is updated. <br>
+                So use computed properties in place of methods. <br>
                 <small>
-                    Example: < button v-on:click="hide_section" > Hide details < / button >
+                    Computed properties should only be used to perform synchronous tasks.
                 </small>
             </p>
-            <p class="">
-                You can pass arguments with events inside methods. <br>
-                <small>
-                    Example: < button v-on:click="increase_counter(5)" >Increase by 5< / button > <br>
-                </small>
-            </p>
+            
             <p class="snippet-box my-2 py-2">
-                Example: Change value of counter on click-event of following buttons. <br>
+                Example: Bind car price to input & on change of car price, the discounted price should change.<br>
                 <div class="mx-0 row mb-3 p-3" style="border: 1px dashed #ccc;">
-                    <a href="javascript:void(0);" v-on:click="increase(5)" class="col-2 mr-3 btn btn-sm btn-light text-success border-success">Increase <span class="fa fa-angle-up"></span></a>
-                    <a href="javascript:void(0);" v-on:click="decrease" class="col-2 mr-3 btn btn-sm btn-light text-danger border-danger">Decrease <span class="fa fa-angle-down"></span></a>
-                    <div class="col-3 demobox text-center">
-                        Counter: {{counter}}
+                    <div class="col-6 demobox text-center py-3">
+                        <input type="number" v-model = 'carprice' placeholder="Price of car" class="form-control" id="inputfield"> 
+                    </div>
+                    <div class="col-6 py-3 px-3 bg-light small" id="alertarea">
+                        Car price: {{carprice}} <br>
+                        10% Discounted price : {{ find_discounted_price }}
                     </div>
                 </div>
-
             </p>
-            <pre>
-                <code>
-                    < button v-on:click="increase_counter"> Increase < / button >
-                    < button v-on:click="increase_counter(5)"> Increase by 5 < / button >
-                    
-                    <strong>~~~ Javascript ~~~ </strong>
-                    methods: {
-                        increase_counter: function() {
-                            return this.count++;
+            
+
+            <div class="code-box px-3 py-2 mb-5">
+                <div class="text-right py-2">
+                    <a href="javascript:void(0);" class="copy-code btn btn-sm btn-secondary" onclick="copy_code(code_area)">
+                        <span class="far fa-copy"></span> Copy
+                    </a>
+                </div>
+                <pre>
+                    <code id="code_area">
+                        < input type="text"  v-model = 'carprice' >
+                        
+                        car price: { { carprice } }
+                        10% Discounted price : { { find_discounted_price } }
+    
+                        <strong>~~~ Javascript ~~~ </strong>
+                        data: {
+                            carprice: 10000
                         },
-                        increase_by_number: function(num){
-                            this.count += num;
-                            return this.count;
+                        computed: {
+                            find_discounted_price: function(){
+                                return carprice - (carprice*0.10);
+                            }
                         }
-                    }
-                </code>                
-            </pre>
+                    </code>                
+                </pre>
+            </div>
         </div>
     </div>
 
@@ -99,8 +104,8 @@
             el: '#app',
             data: {
                 topic_name: 'Events',
-                subtopic_name: 'Listening to events',
-                counter: 0
+                subtopic_name: 'Reacting to changes with computed properties',
+                carprice: 0
             },
             methods:{
                 get_visits: function(){
@@ -108,14 +113,12 @@
                 },
                 show_date: function(){
                     return this.date;
-                },
-                increase: function(num){
-                    console.log("nubmer: ", num);
-                    this.counter += num;
-                    return this.counter;
-                },
-                decrease: function(){
-                    return this.counter--;
+                }
+            },
+            computed: {
+                find_discounted_price: function(){
+                    //let carprice = this.carprice;
+                    return this.carprice - (this.carprice*0.10);
                 }
             }
         });
