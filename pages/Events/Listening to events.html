@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VueDemos - Vue templates</title>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../../css/bootstrap5alpha.min.css">
+    <link rel="stylesheet" href="../../css/all.css">
+
+    <!-- main css file -->
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bgdark px-3">
+        <a href="#" class="navbar-brand">
+            <span class="fab fa-vuejs"></span><span class="logofont">ueDemos</span>
+        </a>
+        <a href="javascript:void(0);" class="theme-toggle">
+            <span class="fa fa-moon text-info"></span>
+        </a>
+    </nav>
+    
+    <div class="container-fluid mx-0 px-0" id="vuedemos">
+        <div class="sidebar bg-light">
+            <!-- dynamic menu here -->
+            <h5 class="text-muted">Topics</h5>
+            <ul class="list-unstyled" id="sidebar-menu">
+                <!-- dropdown topic -->
+                
+            </ul>
+            <p class="text-black-50 small py-1 mb-0" style="border-top: 1px dashed #ccc;">
+                &copy; 2020 <a href="https://root-0.github.io" class="" style="font-family: Georgia, 'Times New Roman', Times, serif;">Akshay</a>
+            </p>
+        </div>
+        <div class="pagecontent pt-3 pb-5" id="app">
+            <h4 class="h3 mb-3">{{this.topic_name}}</h4>
+            <h5 class="h4 pb-2 text-black-50" style="border-bottom: 1px dashed #ccc;">
+                {{this.subtopic_name}}
+            </h5>
+
+            <p>
+                Listen to events with <strong>v-on:</strong>event_name <br>
+                Assign a method on event that takes place. <br>
+                <small>
+                    Example: < button v-on:click="hide_section" > Hide details < / button >
+                </small>
+            </p>
+            <p class="">
+                You can pass arguments with events inside methods. <br>
+                <small>
+                    Example: < button v-on:click="increase_counter(5)" >Increase by 5< / button > <br>
+                </small>
+            </p>
+            <p class="snippet-box my-2 py-2">
+                Example: Change value of counter on click-event of following buttons. <br>
+                <div class="mx-0 row mb-3 p-3" style="border: 1px dashed #ccc;">
+                    <a href="javascript:void(0);" v-on:click="increase(5)" class="col-2 mr-3 btn btn-sm btn-light text-success border-success">Increase <span class="fa fa-angle-up"></span></a>
+                    <a href="javascript:void(0);" v-on:click="decrease" class="col-2 mr-3 btn btn-sm btn-light text-danger border-danger">Decrease <span class="fa fa-angle-down"></span></a>
+                    <div class="col-3 demobox text-center">
+                        Counter: {{counter}}
+                    </div>
+                </div>
+
+            </p>
+            <pre>
+                <code>
+                    < button v-on:click="increase_counter"> Increase < / button >
+                    < button v-on:click="increase_counter(5)"> Increase by 5 < / button >
+                    
+                    <strong>~~~ Javascript ~~~ </strong>
+                    methods: {
+                        increase_counter: function() {
+                            return this.count++;
+                        },
+                        increase_by_number: function(num){
+                            this.count += num;
+                            return this.count;
+                        }
+                    }
+                </code>                
+            </pre>
+        </div>
+    </div>
+
+    <!-- jquery first, then popperjs, then bootstrap5 -->
+    <script src="../../js/jquery-3.3.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap5alpha.min.js"></script>
+
+    <script src="../../js/vue-dev.js"></script>
+    <!-- sidebar menu -->
+    <script src="../../components/sidebar_menu.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                topic_name: 'Events',
+                subtopic_name: 'Listening to events',
+                counter: 0
+            },
+            methods:{
+                get_visits: function(){
+                    return this.visits;
+                },
+                show_date: function(){
+                    return this.date;
+                },
+                increase: function(num){
+                    console.log("nubmer: ", num);
+                    this.counter += num;
+                    return this.counter;
+                },
+                decrease: function(){
+                    return this.counter--;
+                }
+            }
+        });
+
+        function copy_code(element_id){
+            let element = document.getElementById('code_area');
+            let elementText = element.textContent;
+
+            copyText(elementText);
+        }
+
+        function copyText(text){
+            navigator.clipboard.writeText(text);
+            alert('Text copied');
+        }
+
+    </script>
+</body>
+</html>

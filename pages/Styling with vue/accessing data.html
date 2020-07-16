@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VueDemos</title>
+    <title>VueDemos - Vue templates</title>
 
     <!-- bootstrap & fontawesome -->
-    <link rel="stylesheet" href="./css/bootstrap5alpha.min.css">
-    <link rel="stylesheet" href="./css/all.css">
+    <link rel="stylesheet" href="../../css/bootstrap5alpha.min.css">
+    <link rel="stylesheet" href="../../css/all.css">
 
     <!-- main css file -->
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="../../css/main.css">
 </head>
 <body>
     <nav class="navbar navbar-dark bgdark px-3">
@@ -20,8 +20,8 @@
         <a href="javascript:void(0);" class="theme-toggle">
             <span class="fa fa-moon text-info"></span>
         </a>
-    </nav>    
-
+    </nav>
+    
     <div class="container-fluid mx-0 px-0" id="vuedemos">
         <div class="sidebar bg-light">
             <!-- dynamic menu here -->
@@ -35,31 +35,17 @@
             </p>
         </div>
         <div class="pagecontent py-3" id="app">
-            <h4 class="h3 mb-3">Vue Js Initialization</h4>
-            <h5 class="h4 pb-2 text-black-50" style="border-bottom: 1px dashed #ccc;">Local setup & initialization</h5>
+            <h4 class="h3 mb-3">{{this.topic_name}}</h4>
+            <h5 class="h4 pb-2 text-black-50" style="border-bottom: 1px dashed #ccc;">
+                {{this.subtopic_name}}
+            </h5>
 
-            <p class="">
-                Download vuejs script from vuejs' official website. 
-                You can download development version of script which will offer helpful hints in case of errors.
-                <div class="snippet-box">
-                    <code>
-                        &lt; script src="./js/vue-dev.js" &gt;
-                    </code>
-                </div>
-
+            <p>
+                Unlike in template, where we have access to all data objects, in js code it does not work.
+                <br>
+                Use this.property to access data properties inside js code.
             </p>
 
-            <p class="mb-1">Method: {{show_date()}}</p>
-            <p class="mb-1">Data : {{this.date}}</p>
-            <p class="mb-1">Method: {{get_visits()}}</p>
-            <p class="mb-1">Data: {{this.visits}}</p>
-            <p class="snippet-box my-2">
-                **call method <br>
-                Method: { { show_date() } } <br>
-            
-                **call data <br>
-                Data : { { this.date } }
-            </p>
             <div class="code-box px-3 py-2 mb-5">
                 <div class="text-right py-2">
                     <a href="javascript:void(0);" class="copy-code btn btn-sm btn-secondary" onclick="copy_code(code_area)">
@@ -68,43 +54,35 @@
                 </div>
                 <pre class="">
                     <code class="" id="code_area">
-                        var app = new Vue({
-                            el: '#app',
-                            data: {
-                                date: '9th July 2020',
-                                visits: '230'
-                            },
-                            methods:{
-                                get_visits: function(){
-                                    return this.visits;
-                                },
-                                show_date: function(){
-                                    return this.date;
-                                }
+                        data: {
+                            name: 'property name here'
+                        },
+                        methods: {
+                            getprop: function(){
+                                return this.name;
                             }
-                        });            
+                        }
                     </code>
                 </pre>
             </div>
-
         </div>
     </div>
 
     <!-- jquery first, then popperjs, then bootstrap5 -->
-    <script src="./js/jquery-3.3.1.min.js"></script>
-    <script src="./js/popper.min.js"></script>
-    <script src="./js/bootstrap5alpha.min.js"></script>
+    <script src="../../js/jquery-3.3.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap5alpha.min.js"></script>
 
-    <script src="./js/vue-dev.js"></script>
+    <script src="../../js/vue-dev.js"></script>
     <!-- sidebar menu -->
-    <script src="./components/sidebar_menu.js"></script>
+    <script src="../../components/sidebar_menu.js"></script>
 
     <script>
         var app = new Vue({
             el: '#app',
             data: {
-                date: '9th July 2020',
-                visits: '230'
+                topic_name: 'Styling with Vue',
+                subtopic_name: 'Accessing data'
             },
             methods:{
                 get_visits: function(){
@@ -127,6 +105,7 @@
             navigator.clipboard.writeText(text);
             alert('Text copied');
         }
+
     </script>
 </body>
 </html>

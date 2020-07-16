@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VueDemos - Vue templates</title>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../../css/bootstrap5alpha.min.css">
+    <link rel="stylesheet" href="../../css/all.css">
+
+    <!-- main css file -->
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bgdark px-3">
+        <a href="#" class="navbar-brand">
+            <span class="fab fa-vuejs"></span><span class="logofont">ueDemos</span>
+        </a>
+        <a href="javascript:void(0);" class="theme-toggle">
+            <span class="fa fa-moon text-info"></span>
+        </a>
+    </nav>
+    
+    <div class="container-fluid mx-0 px-0" id="vuedemos">
+        <div class="sidebar bg-light">
+            <!-- dynamic menu here -->
+            <h5 class="text-muted">Topics</h5>
+            <ul class="list-unstyled" id="sidebar-menu">
+                <!-- dropdown topic -->
+                
+            </ul>
+            <p class="text-black-50 small py-1 mb-0" style="border-top: 1px dashed #ccc;">
+                &copy; 2020 <a href="https://root-0.github.io" class="" style="font-family: Georgia, 'Times New Roman', Times, serif;">Akshay</a>
+            </p>
+        </div>
+        <div class="pagecontent pt-3 pb-5" id="app">
+            <h4 class="h3 mb-3 text-black-50">{{this.topic_name}}</h4>
+            <h5 class="h4 pb-2" style="border-bottom: 1px dashed #ccc;">
+                {{this.subtopic_name}}
+            </h5>
+
+            <p>
+                When accessing Vue instance, you can write any valid JS code 
+                <br>
+                <em>as long as it has one expression and does not contain any conditionals or loops (if,for,while etc).</em>
+                <br> <br>
+                <small>
+                    Example: <br>
+                    { { counter } } can be calculated in place as { { counter += 5 } } or { { counter++ } } <br>
+                </small>
+            </p>
+            <p class="">
+                < button v-on:click="increase(5)" > <br> can be written as <br> < button v-on:click="<strong>counter += 5</strong>"> <br>
+                <br>
+                <small>
+                    You can also write ternary expressions in vue instance
+                </small>
+            </p>
+            <p class="snippet-box my-2 py-2">
+                Example: check if counter greater than 10 and display respective text. <br>
+                < p > { { counter > 10 ? 'Sorry 10 seats filled' : 'Seats available' } } < / p >
+            </p>
+        </div>
+    </div>
+
+    <!-- jquery first, then popperjs, then bootstrap5 -->
+    <script src="../../js/jquery-3.3.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap5alpha.min.js"></script>
+
+    <script src="../../js/vue-dev.js"></script>
+    <!-- sidebar menu -->
+    <script src="../../components/sidebar_menu.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                topic_name: 'Reactivity',
+                subtopic_name: 'JS code in templates',
+                x: 0,
+                y: 0
+            },
+            methods:{
+                get_visits: function(){
+                    return this.visits;
+                },
+                show_date: function(){
+                    return this.date;
+                },
+                update_coordinates: function(){
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                }
+            }
+        });
+
+        function copy_code(element_id){
+            let element = document.getElementById('code_area');
+            let elementText = element.textContent;
+
+            copyText(elementText);
+        }
+
+        function copyText(text){
+            navigator.clipboard.writeText(text);
+            alert('Text copied');
+        }
+
+    </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
-$dark: #131515;
-$primary: #012427;
-$secondary: #0197a1;
-$light: #91f8ff;
-$wite: #fffafb;
+$dark: #313131;
+$primary: #03808b;
+$secondary: #f0a574;
+$light: #cff7fa;
+$wite: #faffff;
 
 // background
 .bgdark{
@@ -36,4 +36,17 @@ $wite: #fffafb;
 }
 .fgwite{
     color: $wite;
+}
+
+@font-face{
+    font-family: ubuntu;
+    src: url('./fonts/ubuntu/UbuntuCondensed.ttf');
+}
+
+.logofont{
+    font-family: ubuntu;
+    color: $light;
+}
+.navbar-brand span.fab{
+    color: $light;
 }

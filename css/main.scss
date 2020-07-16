@@ -2,19 +2,30 @@
 
 body{
     font-size: 16px;
-    font-family: akrobat, 'sans-serif';
+    font-family: roboto, 'sans-serif';
     margin: 0;
+    line-height: 28px;
+    letter-spacing: 1px;
     padding: 0;
-    overflow: hidden;
+    // overflow-y: auto;
+    // overflow-x: hidden;
 }
-body::-webkit-scrollbar{
-    width: 0.25rem;
+.pagecontent::-webkit-scrollbar,
+#sidebar-menu::-webkit-scrollbar{
+    width: 6px;
+    // border: 2px solid $dark;
 }
-body::-webkit-scrollbar-track{
-    background-color: $dark;
+.pagecontent::-webkit-scrollbar-track,
+#sidebar-menu::-webkit-scrollbar-track
+{
+    border: 1px solid #aaa;
+    background-color: rgb(206, 206, 206);
+    // border: 2px solid $dark;
 }
-body::-webkit-scrollbar-thumb{
-    background-color: $secondary;
+.pagecontent::-webkit-scrollbar-thumb,
+#sidebar-menu::-webkit-scrollbar-thumb{
+    background-color: rgba(255, 255, 255, 0.733);
+    border: 1px solid #aaa;
 }
 
 a{
@@ -22,4 +33,102 @@ a{
 }
 a:hover{
     text-decoration: none;
+}
+h1,h2,h3,h4,h5{
+    font-family: ubuntu;
+    font-weight: bold;
+}
+
+
+// main parent
+#vuedemos{
+    min-height: calc(100vh - 55px);
+    overflow: hidden;
+    position: relative;
+    // display: flex;
+    // flex-wrap: nowrap;
+    // flex-direction: row;
+    // overflow-y: auto;
+}
+
+.sidebar{
+    width: 200px;
+    padding: 15px 0px 0px 10px;
+    height: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    overflow-y: auto;
+}
+.pagecontent{
+    overflow-y: auto;
+    height: calc(100vh - 50px);
+    width: calc(100vw - 200px);
+    position: absolute;
+    left: 200px;
+    top: 0px;
+    padding: 15px;
+}
+
+// sidebar dropdowns
+.sidebar{
+    display: flex;
+    flex-direction: column;
+}
+#sidebar-menu{
+    overflow-y: auto;
+    flex-grow: 2;
+}
+.sidebar .topic{
+    margin-bottom: 5px;
+}
+.sidebar .topic-dropdown,
+.sidebar .topic-simple{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    display: block;
+    color: #666;
+    font-family: ubuntu;
+}
+.sidebar .topic-dropdown:hover,
+.sidebar .topic-simple:hover{
+    background-color: rgba($color: white, $alpha: 0.75);
+    color: $secondary;
+}
+.sidebar .topic-dropdown span{
+    font-size: 14px;
+    color: #888;
+}
+.sidebar .topic-dropdown-menu{
+    border-left:  1px solid #ddd;
+    font-size: 13px;
+}
+.sidebar .topic-dropdown-menu a{
+    color: $dark;
+    padding: 5px;
+    font-family: roboto;
+    display: block;
+}
+
+.sidebar .topic-dropdown-menu a:hover,
+.sidebar .topic-dropdown-menu a.active{
+    background-color: rgba($color: white, $alpha: 0.75);
+    color: $secondary;
+    // text-decoration: underline;
+}
+
+// pagecontent
+.code-box pre{
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: whitesmoke;
+    border: 1px dashed #ccc;
+}
+
+.snippet-box{
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
+    // background-color: red;
+    font-size: 12px;
 }
