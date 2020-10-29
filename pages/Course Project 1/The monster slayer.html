@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VueDemos - {{topic_name}}</title>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../../css/bootstrap5alpha.min.css">
+    <link rel="stylesheet" href="../../css/all.css">
+
+    <!-- main css file -->
+    <link rel="stylesheet" href="../../css/main.css">
+
+    <style>
+        .game-log ul{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border: 1px dashed #ccc;
+        }
+        .health{
+            height: 25px;
+            transition: all ease 0.35s;
+        }
+        .healthbar{
+            position: relative;
+        }
+        .health-indicator{
+            position: absolute;
+            top: 0;
+        }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-dark bgdark px-3">
+        <a href="#" class="navbar-brand">
+            <span class="fab fa-vuejs"></span><span class="logofont">ueDemos</span>
+        </a>
+        <a href="javascript:void(0);" class="theme-toggle">
+            <span class="fa fa-moon text-info"></span>
+        </a>
+    </nav>
+    
+    <div class="container-fluid mx-0 px-0" id="vuedemos">
+        <div class="sidebar bg-light">
+            <!-- dynamic menu here -->
+            <h5 class="text-muted">Topics</h5>
+            <ul class="list-unstyled" id="sidebar-menu">
+                <!-- dropdown topic -->
+                
+            </ul>
+            <p class="text-black-50 small py-1 mb-0" style="border-top: 1px dashed #ccc;">
+                &copy; 2020 <a href="https://root-0.github.io" class="" style="font-family: Georgia, 'Times New Roman', Times, serif;">Akshay</a>
+            </p>
+        </div>
+        <div class="pagecontent pt-3 pb-5" id="app">
+            <h4 class="h3 mb-3 text-black-50">{{this.topic_name}}</h4>
+            <h5 class="h4 pb-2" style="border-bottom: 1px dashed #ccc;">
+                {{this.subtopic_name}}
+            </h5>
+
+            <div class="game-div py-3 my-3">
+                <div class="health-bars row mx-0 px-3">
+                    <!-- user health -->
+                    <div class="col-5 healthbar-wrap text-center">
+                        <i class="fa fa-user-astronaut fa-3x text-success"></i>
+                        <h5 class="text-black-50">User</h5>
+                        
+                        <div class="healthbar mt-4 border border-secondary rounded" v-show = "game_started">
+                            <div class="health bg-success text-center" :style = '{width : player_health + "%"}'></div>
+                            <span class="health-indicator">{{player_health}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-2 text-center">
+                        <h3 class="h3 mt-4 text-muted">vs</h3>
+                    </div>
+
+                    <!-- monster health -->
+                    <div class="col-5 healthbar-wrap text-center">
+                        <i class="fab fa-optin-monster fa-3x text-info"></i>
+                        <h5 class="text-black-50">Monster</h5>
+                        
+                        <div class="healthbar mt-4 border border-secondary rounded" v-show = "game_started">
+                            <div class="health bg-info text-center" :style = "{width: monster_health + '%'}"></div>
+                            <span class="health-indicator">{{monster_health}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-buttons py-3 my-3">
+                    <div class="start-game text-center" v-show = "!game_started">
+                        <a href="javascript:void(0);" class="btn btn-primary" @click="game_started = true">Start Game</a>
+                    </div>
+                    
+                    <div class="game-options text-center pt-3" v-show = "game_started">
+                        <a href="javascript:void(0);" class="btn btn-danger mr-3" @click="execute_attack"><span class="fa fa-bolt"></span> Attack</a>
+                        <a href="javascript:void(0);" class="btn mr-3" @click="execute_ultimate" 
+                            :class = "{'btn-outline-secondary disabled': user.ultimate_cooldown > 0, 'btn-warning': user.ultimate_cooldown == 0}">
+                            <span class="fa fa-skull-crossbones"></span> Ultimate Ability
+                        </a>
+                        <a href="javascript:void(0);" class="btn mr-3" @click="execute_heal"
+                            :class = "{'btn-outline-secondary disabled': user.heal_cooldown > 0, 'btn-success': user.heal_cooldown == 0}">
+                            <span class="fa fa-medkit"></span> Heal
+                        </a>
+                        <a href="javascript:void(0);" class="btn btn-info" @click = 'game_end'><span class="fa fa-tired"></span> Give up</a>
+
+                        <div class="row mx-0 my-4">
+                            <div class="col-md-5 text-left px-2 py-3">
+                                <p class="mb-1">Status</p>
+                                <p class="small text-muted mb-1">
+                                    Ultimate Ability : <span class="ultimate-ready text-success" v-show = 'user.ultimate_cooldown == 0'>Available</span>
+                                    <span class="ultimate-notready text-danger" v-show = 'user.ultimate_cooldown > 0'>Available in {{user.ultimate_cooldown}} attacks.</span>
+                                </p>
+                                <p class="small text-muted mb-1">
+                                    Heal : <span class="heal-ready text-success" v-show = 'user.heal_cooldown == 0'>Available</span>
+                                    <span class="heal-notready text-danger" v-show = 'user.heal_cooldown > 0'>Available in {{user.heal_cooldown}} attacks.</span>
+                                </p>
+                            </div>
+    
+                            <!-- game turn logs -->
+                            <div class="col-md-7 px-3 text-left game-log py-3">
+                                <p class="text-muted px-2 mb-0">Game Turn Logs</p>
+                                <ul class="list-unstyled game-log-list px-2">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- jquery first, then popperjs, then bootstrap5 -->
+    <script src="../../js/jquery-3.3.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap5alpha.min.js"></script>
+
+    <script src="../../js/vue-dev.js"></script>
+    <!-- sidebar menu -->
+    <script src="../../components/sidebar_menu.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                topic_name: 'Course Project 1',
+                subtopic_name: 'The Monster Slayer',
+                player_health: 100,
+                monster_health: 100,
+                game_started: false,
+                attacker: 'User',
+                defender: 'Monster',
+                user: {
+                    heal_used: false,
+                    ultimate_used: false,
+                    heal_cooldown: 5,
+                    ultimate_cooldown: 5
+                },
+                monster: {
+                    heal_used: false,
+                    ultimate_used: false,
+                    heal_cooldown: 4,
+                    ultimate_cooldown: 5
+                },
+                turn_number: 0,
+                turn_log: []
+            },
+            methods:{
+                game_end: function(){
+                    console.log("called end method");
+                    this.game_started = false;
+                    this.player_health = 100;
+                    this.monster_health = 100;
+
+                    this.user.heal_cooldown = 5;
+                    this.user.ultimate_cooldown = 5;
+
+                    this.monster.heal_cooldown = 5;
+                    this.monster.ultimate_cooldown = 5;
+
+                    this.turn_number = 0;
+                },
+                execute_attack: function(){
+                    //increment turn
+                    this.turn_number += 1;
+
+                    this.attacker = 'User';
+                    this.defender = 'Monster';
+                    //check attacker
+                    if(this.attacker == 'User'){
+                        //reduce heal cooldown
+                        if(this.user.heal_cooldown > 0){
+                            this.user.heal_cooldown -= 1;
+                        }
+
+                        //reduce ulti cooldown
+                        if(this.user.ultimate_cooldown > 0){
+                            this.user.ultimate_cooldown -= 1;
+                        }
+
+                        //reset flags
+                        this.user.ultimate_used = false;
+                        this.user.heal_used = false;
+
+                        //user attack
+                        var user_damage = this.calculate_damage(3,10);
+                        this.monster_health -= user_damage;
+                        
+                        this.generate_log(this.turn_number, this.attacker, this.defender, user_damage, 0, 0);
+                        
+                        if(this.monster_health < 0){
+                            this.monster_health = 0;
+                        }
+                        if(this.check_win()){
+                            return;
+                        }
+
+                        //change after user attack
+                        this.attacker = 'Monster';
+                        this.defender = 'User';
+                    }
+                    if(this.attacker == 'Monster')
+                    {
+                        //reduce heal cooldown
+                        if(this.monster.heal_cooldown > 0){
+                            this.monster.heal_cooldown -= 1;
+                        }
+
+                        //reduce ulti cooldown
+                        if(this.monster.ultimate_cooldown > 0){
+                            this.monster.ultimate_cooldown -= 1;
+                        }
+
+                        //monster attack
+                        this.monster_attacks(user_damage);
+
+                        //change after attack
+                        this.attacker = 'User',
+                        this.defender = 'Monster'
+                    }
+                    
+                },
+                execute_ultimate: function(){
+                    //increment turn
+                    this.turn_number += 1;
+
+                    //reset cooldown
+                    if(this.attacker == 'User'){
+                        this.user.ultimate_cooldown = 5;
+                        // turn flag
+                        this.user.ultimate_used = true;
+                    }
+
+                    //user attack
+                    var ulti_damage = this.calculate_damage(10,20);
+                    this.monster_health -= ulti_damage;
+
+                    this.attacker = 'User';
+                    this.defender = 'Monster';
+                    this.generate_log(this.turn_number, this.attacker, this.defender, 0, ulti_damage, 0);
+                    
+                    //reset flags
+                    this.user.ultimate_used = false;
+                    
+                    if(this.monster_health < 0){
+                        this.monster_health = 0;
+                    }
+
+                    if(this.check_win()){
+                        return;
+                    }
+                    
+                    this.monster_attacks();
+                    //change after attack
+                    this.attacker = 'User',
+                    this.defender = 'Monster'
+                },
+                execute_heal: function(){
+                    //increment turn
+                    this.turn_number += 1;
+
+                    if(this.attacker == 'User'){
+                        this.user.heal_cooldown = 5;
+                        // turn flag
+                        this.user.heal_used = true;
+
+                        var old_health = this.player_health;
+                        console.log("old: ", old_health);
+                        
+                        this.monster_attacks();
+                        
+                        if(old_health <= 85){
+                            this.player_health = old_health + 15;
+                            this.generate_log(this.turn_number, this.attacker, this.defender, 0, 0, this.player_health - old_health);
+                            this.user.heal_used = false;
+                        }
+                        else{
+                            this.player_health = 100;
+                            this.generate_log(this.turn_number, this.attacker, this.defender, 0, 0, 100 - old_health);
+                            this.user.heal_used = false;
+                        }
+                        
+                    }
+                },
+                calculate_damage: function(min,max){
+                    return Math.max(Math.floor(Math.random() * max) + 1, min);
+                },
+                monster_attacks: function(user_damage){
+                    this.attacker = 'Monster';
+                    this.defender = 'User';
+                    
+                    //reset flags
+                    this.monster.ultimate_used = false;
+                    this.monster.heal_used = false;
+
+                    // monster basic attack
+                    if(this.monster.heal_cooldown != 0 && this.monster.ultimate_cooldown != 0){
+                        //monster basic attack
+                        var monster_damage = this.calculate_damage(3,10);
+                        this.player_health -= monster_damage;
+                        
+                        this.generate_log(this.turn_number, this.attacker, this.defender, monster_damage, 0, 0);
+                    }
+
+                    // monster ultimate check
+                    if(this.monster.ultimate_cooldown == 0){
+                        this.monster.ultimate_cooldown = 5;
+                        this.monster.ultimate_used = true;
+                        
+                        //monster attack
+                        var monster_damage = this.calculate_damage(10,20);
+                        this.player_health -= monster_damage;
+                        
+                        console.log("monster ultimate: ", monster_damage);
+                        this.generate_log(this.turn_number, this.attacker, this.defender, 0, monster_damage, 0);
+
+                        //reset flag
+                        this.monster.ultimate_used = false;
+                    }
+
+                    // monster heal check
+                    else if(this.monster.heal_cooldown == 0){
+                        this.monster.heal_cooldown = 4;
+                        // turn flag
+                        this.monster.heal_used = true;
+
+                        if(this.monster_health <= 85){
+                            this.monster_health += (15+user_damage);
+                            console.log("heal_applied: 15 flat");
+                            this.generate_log(this.turn_number, this.attacker, this.defender, 0, 0, (15+user_damage)-user_damage);
+
+                            // turn flag
+                            this.monster.heal_used = false;
+                        }
+                        else if(this.monster_health > 85){
+                            var old_health = this.monster_health;
+                            this.monster_health = 100;
+
+                            var heal_applied = 100 - old_health;
+                            console.log("heal_applied: ", heal_applied);
+                            this.generate_log(this.turn_number, this.attacker, this.defender, 0, 0, heal_applied); 
+
+                            // turn flag
+                            this.monster.heal_used = false;
+                        }
+                    }
+
+                    if(this.player_health < 0){
+                        this.player_health = 0;
+                    }
+
+                    this.attacker = 'User';
+                    this.defender = 'Monster';
+                    this.check_win();
+                    
+                },
+                check_win: function(){
+                    if(this.monster_health <= 0){
+                        if(confirm('You won! New Game?')){
+                            this.game_end();
+                        }
+                        else{
+                            //this.game_started = false;
+                            console.log("not playing again");
+                        }
+                        return true;
+                    }
+                    else if(this.player_health <= 0){
+                        if(confirm('You lost! New Game?')){
+                            this.game_end();
+                        }
+                        else{
+                            //this.game_started = false;
+                            console.log("not playing again");
+                        }
+                        return true;
+                    }
+                    return false;
+                },
+                generate_log: function(turn_number, attacker, defender, damage, ultimate, heal){
+                    var log_item = document.createElement('li');
+                    log_item.classList.add('game-log-item', 'small');
+                    
+                    var log_item_inner = `
+                        <span class="attack-log p-1" style="background: floralwhite;">
+                            <span class="text-muted">Turn ${turn_number} <i class="fa fa-angle-right text-muted" style="font-size: 12px;"></i> </span>
+                            ${attacker} attacked ${defender} dealing <span class="text-danger text-decoration-underline">${damage}</span> damage.
+                        </span>
+                    `;
+
+                    if(this.user.heal_used || this.monster.heal_used){
+                        var log_item_inner = `<span class="heal-log p-1">
+                                <span class="text-success">Turn ${turn_number} <i class="fa fa-angle-right text-success" style="font-size: 12px;"></i> </span>
+                                ${attacker} used heal option, healing <span class="text-success text-decoration-underline">${heal}</span> health.
+                            </span>`;
+                    }
+                    style="background: beige;"
+
+                    if(this.user.ultimate_used || this.monster.ultimate_used){
+                        var log_item_inner = `<span class="heal-log p-1">
+                                <span class="text-warning">Turn ${turn_number} <i class="fa fa-angle-right text-warning" style="font-size: 12px;"></i> </span>
+                                ${attacker} used ULTIMATE dealing <span class="text-warning text-decoration-underline">${ultimate}</span> critical damage.
+                            </span>`;
+                    }
+                    var log_list = document.querySelector('.game-log-list');
+                    log_item.innerHTML=log_item_inner;
+                    log_list.prepend(log_item);
+                }
+            
+            }
+        });
+
+        function pagetitle(){
+            var title = document.querySelector('title');
+            var pageh4 = document.querySelector('#app > h4');
+
+            title.innerText = 'VueDemos - ' + pageh4.innerText;
+
+            console.log(title.innerText);
+        }
+
+        pagetitle();
+    </script>
+</body>
+</html>

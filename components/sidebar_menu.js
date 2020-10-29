@@ -20,6 +20,30 @@ var sidebar_links = [
         menulinks: [
             'JS code in templates', 'Two-way data binding', 'Computed properties', 'Watch for changes'
         ]
+    },
+    {
+        name: 'Dynamic styling',
+        menulinks: [
+            'Dynamic css classes', 'Dynamic classes using property', 'Styling elements without classes'
+        ]
+    },
+    {
+        name: 'Conditionals and Lists',
+        menulinks: [
+            'V-If and V-Show', 'V-for to render lists'
+        ]
+    },
+    {
+        name: 'Course Project 1',
+        menulinks: [
+            'The monster slayer'
+        ]
+    },
+    {
+        name: 'Development workflow',
+        menulinks: [
+            'Installing Vue CLI'
+        ]
     }
 ]
 
@@ -34,7 +58,7 @@ function generate_sidebar(sidebar_links){
                                     <ul class="topic-dropdown-menu list-unstyled" style="display: none;">
                                         ${
                                             topic.menulinks.map(function(menulink){
-                                                console.log("menulink: "+menulink+", ./pages/" + topic.name);
+                                                // console.log("menulink: "+menulink+", ./pages/" + topic.name);
                                                 var subtopic = `<li class="topic-listitem">
                                                     <a href="/pages/${topic.name}/${menulink}.html" class="subtopic-link">${menulink}</a>
                                                 </li>`;
@@ -45,7 +69,7 @@ function generate_sidebar(sidebar_links){
             add_topic(sidebar_menu, topic_dropdown);
         }
         else{
-            console.log("menu N/A for ", topic.name);
+            // console.log("menu N/A for ", topic.name);
             if(topic.name == 'Introduction'){
                 var topic_simple = `<a href="../../index.html" class="topic-simple">
                                     ${topic.name}
@@ -67,7 +91,7 @@ function add_topic(sidebar_menu, topic){
     var listitem = document.createElement('li');
     listitem.className = 'topic';
     listitem.innerHTML = topic;
-    console.log("sidebar_menu:", sidebar_menu);
+    // console.log("sidebar_menu:", sidebar_menu);
     sidebar_menu.appendChild(listitem);
 }
 

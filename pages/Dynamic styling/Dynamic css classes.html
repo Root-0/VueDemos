@@ -41,23 +41,31 @@
             </h5>
 
             <p>
-                Watch is an object which executes code upon vue-data changes.
-                The name of watch function should be same as the data attribute to watch.
+                You can conditinally add/remove classes with vuejs. We can pass an object to v-bind:class to dynamically toggle classes: <br>
                 <small>
-                    Computed properties should only be used to perform synchronous tasks. <br>
-                    For asynchronous tasks, timeouts etc use watch object.
+                    < div v-bind:class="{ classname: property_truthiness }" >< / div > <br>
+                    The above syntax means the presence of the active class will be determined by the truthiness of the data property.
+                    <br> <br>
+                    You can have multiple classes toggled by having more fields in the object. <br>
+                    < div v-bind:class="{ class_1 : property_1, class_2 : property_2, class3 : property_3 }" >< / div >
                 </small>
             </p>
             
             <p class="snippet-box my-2 py-2">
-                Example: Bind car price to input & on change of car price, the discounted price should change.<br>
+                Example: Toggle cardproperty on button click & change class of demo-box depending on property value.<br>
                 <div class="mx-0 row mb-3 p-3" style="border: 1px dashed #ccc;">
                     <div class="col-6 demobox text-center py-3">
-                        <input type="number" v-model = 'carprice' placeholder="Price of car" class="form-control" id="inputfield"> 
+                        <button @click = "cardgreen = true, cardred = false" class="text-success bg-light border-0 mr-3">
+                            Green box <span class="fa fa-check d-none" :class="{'d-inline': cardgreen}"></span>
+                        </button>
+                        <button @click = "cardred = true, cardgreen = false" class="text-danger bg-light border-0 mr-3">
+                            Red box <span class="fa fa-check d-none" :class="{'d-inline': cardred}"></span>
+                        </button> 
                     </div>
                     <div class="col-6 py-3 px-3 bg-light small" id="alertarea">
-                        Car price: {{carprice}} <br>
-                        10% Discounted price : {{ discounted_price }}
+                        <div class="p-3 text-white" :class = "{ 'bg-danger' : cardred, 'bg-success' : cardgreen }" >
+                            demo box
+                        </div>
                     </div>
                 </div>
             </p>
@@ -71,19 +79,16 @@
                 </div>
                 <pre>
                     <code id="code_area">
-                        < input type="text"  v-model = 'carprice' >
+                        < button @click = "cardgreen = true, cardred = false"> Green box < / button >
                         
-                        car price: { { carprice } }
-                        10% Discounted price : { { find_discounted_price } }
-    
+                        < div class="p-3" :class = "{ 'bg-danger' : cardred, 'bg-success' : cardgreen }" >
+                            demo box
+                        < / div >
+
                         <strong>~~~ Javascript ~~~ </strong>
                         data: {
-                            carprice: 10000
-                        },
-                        watch: {
-                            carprice: function(){
-                                this.discounted_price = this.carprice - (this.carprice*0.10);
-                            }
+                            cardred: false,
+                            cardgreen: false
                         }
                     </code>                
                 </pre>
@@ -104,10 +109,10 @@
         var app = new Vue({
             el: '#app',
             data: {
-                topic_name: 'Reactivity',
-                subtopic_name: 'Watch for changes (alternative to computed properties)',
-                carprice: 0,
-                discounted_price: 0
+                topic_name: 'Dynamic styling',
+                subtopic_name: 'Dynamic css class binding',
+                cardred: false,
+                cardgreen: false
             },
             methods:{
                 get_visits: function(){
@@ -115,11 +120,6 @@
                 },
                 show_date: function(){
                     return this.date;
-                }
-            },
-            watch: {
-                carprice: function(){
-                    this.discounted_price = this.carprice - (this.carprice*0.10);
                 }
             }
         });

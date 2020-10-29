@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VueDemos - Vue templates</title>
+    <title>VueDemos - {{topic_name}}</title>
 
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" href="../../css/bootstrap5alpha.min.css">
@@ -11,6 +11,7 @@
 
     <!-- main css file -->
     <link rel="stylesheet" href="../../css/main.css">
+
 </head>
 <body>
     <nav class="navbar navbar-dark bgdark px-3">
@@ -41,27 +42,33 @@
             </h5>
 
             <p>
-                Watch is an object which executes code upon vue-data changes.
-                The name of watch function should be same as the data attribute to watch.
+                Make sure you have nodejs installed on your machine, as npm is required to install webpack.
+                <br>
                 <small>
-                    Computed properties should only be used to perform synchronous tasks. <br>
-                    For asynchronous tasks, timeouts etc use watch object.
+                    We will use the 'webpack-simple' workflow for development. <br>
+                    For advanced use cases like testing, use 'webpack' workflow.
+                    <br>
                 </small>
             </p>
             
             <p class="snippet-box my-2 py-2">
-                Example: Bind car price to input & on change of car price, the discounted price should change.<br>
+                Example: Install vue cli ==> npm install -g vue-cli<br>
+                <br>
+                Usage: vue init < template-name > < project-name ><br>
+                Example: vue init <em>webpack my-demo-project</em> <br>
+
+
                 <div class="mx-0 row mb-3 p-3" style="border: 1px dashed #ccc;">
-                    <div class="col-6 demobox text-center py-3">
-                        <input type="number" v-model = 'carprice' placeholder="Price of car" class="form-control" id="inputfield"> 
-                    </div>
-                    <div class="col-6 py-3 px-3 bg-light small" id="alertarea">
-                        Car price: {{carprice}} <br>
-                        10% Discounted price : {{ discounted_price }}
+                    <div class="col-12 demobox py-3">
+                        <p class="small text-muted mt-3 mb-1">Navigate inside terminal to your folder</p>
+                        [ vue init <strong>webpack-simple</strong> <em>vue-cli-demo</em> ] <br> 
+                        [ cd vue-cli-demo ] <br>
+                        [ npm install ] <small class="text-muted">Install dependencies of webpack</small> <br>
+                        [ npm run dev ] <small class="text-muted">Run server</small>
+                        <br>
                     </div>
                 </div>
             </p>
-            
 
             <div class="code-box px-3 py-2 mb-5">
                 <div class="text-right py-2">
@@ -71,21 +78,15 @@
                 </div>
                 <pre>
                     <code id="code_area">
-                        < input type="text"  v-model = 'carprice' >
                         
-                        car price: { { carprice } }
-                        10% Discounted price : { { find_discounted_price } }
-    
                         <strong>~~~ Javascript ~~~ </strong>
                         data: {
-                            carprice: 10000
-                        },
-                        watch: {
-                            carprice: function(){
-                                this.discounted_price = this.carprice - (this.carprice*0.10);
-                            }
+                            planets: [
+                                'mercury', 'venus', 'earth', 'mars', 'jupiter', 'uranus', 'neptune'
+                            ]
                         }
-                    </code>                
+
+                    </code>    
                 </pre>
             </div>
         </div>
@@ -104,22 +105,16 @@
         var app = new Vue({
             el: '#app',
             data: {
-                topic_name: 'Reactivity',
-                subtopic_name: 'Watch for changes (alternative to computed properties)',
-                carprice: 0,
-                discounted_price: 0
+                topic_name: 'Development Workflow',
+                subtopic_name: 'Installing Vue-CLI & creating new project'
             },
             methods:{
-                get_visits: function(){
-                    return this.visits;
-                },
-                show_date: function(){
-                    return this.date;
-                }
-            },
-            watch: {
-                carprice: function(){
-                    this.discounted_price = this.carprice - (this.carprice*0.10);
+                mystyle: function(){
+                    return {
+                        backgroundColor: this.bg_color_2,
+                        borderColor: this.border_color,
+                        borderRadius: this.border_radius
+                    }
                 }
             }
         });
@@ -136,6 +131,16 @@
             alert('Text copied');
         }
 
+        function pagetitle(){
+            var title = document.querySelector('title');
+            var pageh4 = document.querySelector('#app > h4');
+
+            title.innerText = 'VueDemos - ' + pageh4.innerText;
+
+            console.log(title.innerText);
+        }
+
+        pagetitle();
     </script>
 </body>
 </html>

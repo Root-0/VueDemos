@@ -41,23 +41,25 @@
             </h5>
 
             <p>
-                Watch is an object which executes code upon vue-data changes.
-                The name of watch function should be same as the data attribute to watch.
+                We can specify a property to attach instead of condition/classes inside :class<br>
+                Whenever the property changes, classes get updated.
                 <small>
-                    Computed properties should only be used to perform synchronous tasks. <br>
-                    For asynchronous tasks, timeouts etc use watch object.
+                    < div v-bind:class="property / method / computed property" >< / div > <br>
+                    The above syntax means the data inside property or the return value of method will be added as class.
+                    <br>
                 </small>
             </p>
             
             <p class="snippet-box my-2 py-2">
-                Example: Bind car price to input & on change of car price, the discounted price should change.<br>
+                Example: Change color of box by specifying the color class inside input.<br>
                 <div class="mx-0 row mb-3 p-3" style="border: 1px dashed #ccc;">
                     <div class="col-6 demobox text-center py-3">
-                        <input type="number" v-model = 'carprice' placeholder="Price of car" class="form-control" id="inputfield"> 
+                        <input type="text" class="form-control" placeholder="specify color class" v-model = 'bg_color'>
                     </div>
                     <div class="col-6 py-3 px-3 bg-light small" id="alertarea">
-                        Car price: {{carprice}} <br>
-                        10% Discounted price : {{ discounted_price }}
+                        <div class="p-3 text-white" :class = "bg_color" >
+                            demo box
+                        </div>
                     </div>
                 </div>
             </p>
@@ -71,19 +73,15 @@
                 </div>
                 <pre>
                     <code id="code_area">
-                        < input type="text"  v-model = 'carprice' >
+                        < input type="text" v-model = 'bg_color' >
                         
-                        car price: { { carprice } }
-                        10% Discounted price : { { find_discounted_price } }
-    
+                        < div class="p-3" :class = "bg_color" >
+                            demo box
+                        < / div >
+
                         <strong>~~~ Javascript ~~~ </strong>
                         data: {
-                            carprice: 10000
-                        },
-                        watch: {
-                            carprice: function(){
-                                this.discounted_price = this.carprice - (this.carprice*0.10);
-                            }
+                            bg_color: 'bg-white'
                         }
                     </code>                
                 </pre>
@@ -104,10 +102,9 @@
         var app = new Vue({
             el: '#app',
             data: {
-                topic_name: 'Reactivity',
-                subtopic_name: 'Watch for changes (alternative to computed properties)',
-                carprice: 0,
-                discounted_price: 0
+                topic_name: 'Dynamic styling',
+                subtopic_name: 'Dynamic css class binding',
+                bg_color: 'bg-light'
             },
             methods:{
                 get_visits: function(){
@@ -115,11 +112,6 @@
                 },
                 show_date: function(){
                     return this.date;
-                }
-            },
-            watch: {
-                carprice: function(){
-                    this.discounted_price = this.carprice - (this.carprice*0.10);
                 }
             }
         });
